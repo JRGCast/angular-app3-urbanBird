@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { OfferServices } from 'src/services/offers.service';
 import { Offer } from '../shared/Offer.model';
 
@@ -12,9 +12,16 @@ export class HomeComponent implements OnInit {
 
   public everyOffer!: Array<Offer>
 
-  constructor(private theOfferService: OfferServices) { }
+  constructor(private theOfferService: OfferServices) {
+
+  }
+
+  theFilter(bestOffers: boolean) {
+    this.theOfferService.bestOffershttp(bestOffers).then((data: Array<Offer>) => this.everyOffer = data)
+  }
 
   ngOnInit(): void {
-    this.theOfferService.fetchAllThoseOffers().then(response => this.everyOffer = response)
+    this.theOfferService.fetchAllThoseOffersHttp().then((data: Array<Offer>) => this.everyOffer = data)
   }
+
 }

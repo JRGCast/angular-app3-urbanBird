@@ -1,0 +1,31 @@
+<div class="container">
+  <header class="secao">
+    <h3 class="text-center">Cinema, viagens, diversão muito e mais!</h3>
+    <h5 class="text-center">Conheça as melhores ofertas para você se divertir quando quiser:</h5>
+  </header>
+  <hr />
+  <div *ngFor="let fOffer of funOffers">
+    <article class="row">
+      <div class="col-md-4">
+        <img [src]="fOffer.imagens[0].url" class="img-fluid" />
+      </div>
+      <div class="col-md-8">
+        <div class="row">
+          <h4>{{fOffer.titulo}}</h4>
+        </div>
+        <div class="row">
+          <h5>{{fOffer.descricao_oferta}}</h5>
+        </div>
+        <div class="row">
+          <p>Anunciado por: <b>{{fOffer.anunciante}}</b></p>
+        </div>
+        <div class="row">
+          <p>R$ {{fOffer.valor.toFixed(2).replace('.', ',')}}</p>
+        </div>
+        <div class="row">
+          <button [routerLink]="['oferta', fOffer.id]" class="btn btn-outline-success">Ver oferta</button>
+        </div>
+      </div>
+    </article>
+    <hr />
+  </div>

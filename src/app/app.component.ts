@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'urbanBird-root',
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'angular-app3-urbanBird';
+
+  params() {
+    HttpParams.toString()
+  }
 }

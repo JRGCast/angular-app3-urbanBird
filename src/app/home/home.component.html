@@ -5,14 +5,15 @@
   </section>
   <hr />
   <div class="row">
-    <article class="col-sm-4" *ngFor="let item of everyOffer; let i = index">
+    <article class="col-sm-4" *ngFor="let item of everyOffer">
       <div class="card">
-        <img class="card-img-top" [src]="item.imagens[i].url">
+        <img class="card-img-top" [src]="item.imagens[0].url">
         <div class="card-block">
           <h4 class="card-title">{{item.titulo}}</h4>
           <p class="card-text">{{item.descricao_oferta}}</p>
           <p class="preco">R${{item.valor.toFixed(2).replace('.', ',')}}</p>
-          <a href="#" class="btn btn-outline-primary">Ver oferta</a>
+          <!-- Quando for necessário passar parâmetros, lembre-se que o routerLink é um array -->
+          <button [routerLink]="['oferta', item.id]" class="btn btn-outline-primary">Ver oferta</button>
         </div>
       </div>
     </article>
