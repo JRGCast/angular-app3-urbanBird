@@ -1,22 +1,24 @@
-import { Component, ComponentFactoryResolver, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { OfferServices } from 'src/services/offers.service';
+import { Component, OnInit } from '@angular/core';
+import { FetchServices } from 'src/services/fetchInAPI.service';
 import { ActivatedRoute } from '@angular/router';
 import { Offer } from '../shared/Offer.model';
+import { Observable, interval, Observer, Subscription } from 'rxjs';
 
 @Component({
   selector: 'urbanBird-offer',
   templateUrl: './offer.component.html',
   styleUrls: ['./offer.component.scss'],
-  providers: [OfferServices]
+  providers: [FetchServices]
 })
 export class OfferComponent implements OnInit {
 
   public currOffer!: Offer
+  public showHowToUse: boolean = true
   // por quê currOffer diretamente no constructor dá pala?
   constructor(
     // public currOffer!: Offer // aqui dá pala
     private theRoute: ActivatedRoute,
-    private theOfficeService: OfferServices,
+    private theOfficeService: FetchServices,
   ) { }
 
   ngOnInit(): void {
@@ -24,10 +26,8 @@ export class OfferComponent implements OnInit {
       const currId = this.theRoute.snapshot.params['id']
       this.theOfficeService.offerById(currId).then((theCurrOffer: any) => {
         this.currOffer = theCurrOffer;
-        console.log(this.currOffer)
       })
       console.log(this.currOffer)
     }, 1000)
   }
-
 }

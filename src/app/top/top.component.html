@@ -5,9 +5,19 @@
         <img src="/assets/logo.png" />
       </a>
       <a a href="#"><img src="/assets/carrinho.png" /></a>
+      <a [routerLink]="['just-test']" style="font-size: small; width: 10%;">Ir para página de testes</a>
+      <!-- #searchInput é a variável de referência que aponta para o input, facilitando a recuperação do value no mesmo elemento HTML;
+      afinal, não é mais necessário passar o evento e dissecá-lo na lógica da função -->
+      <div>
+        <input type="text" class="form-control" placeholder="Pesquise ofertas" #searchInput
+          (keyup)="search(searchInput.value)" />
+        <ul class="list-group" style="position: absolute;">
+          <li class="list-group-item active" aria-current="true" *ngFor="let theOffer of theSearchedOffers">
+            {{theOffer.titulo}}</li>
+        </ul>
+      </div>
     </div>
   </nav>
-
   <div class="menu">
     <div class="container">
       <ul class="nav">
@@ -21,7 +31,6 @@
     </div>
   </div>
 </div>
-
 <div class="banner">
   <img src="/assets/banners/img_1.jpg" />
 </div>

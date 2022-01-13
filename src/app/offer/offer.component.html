@@ -33,6 +33,25 @@
       </div>
     </div>
   </section>
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <!-- Na classe abaixo, seria possível substituir o click por routerLinkActive para fazer mudanças na classe, por exemplo, colocar
+      routerLinkActive="nav-link active", ou alterar outros parâmetros de acordo com a rota ativa -->
+    <li class="nav-item" (click)="showHowToUse = true" routerLink="como-usar">
+      <a [ngClass]="showHowToUse ? 'nav-link active' : 'nav-link'" id="como-usar-tab" data-toggle="tab" role="tab"
+        aria-controls="como-usar" aria-selected="true">Como usar</a>
+    </li>
+    <li class="nav-item" (click)="showHowToUse = false" routerLink="onde-fica">
+      <a [ngClass]="!showHowToUse ? 'nav-link active' : 'nav-link'" class="nav-link" id="onde-fica-tab"
+        data-toggle="tab" role="tab" aria-controls="onde-fica" aria-selected="false">Onde fica</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <router-outlet></router-outlet>
+    <!-- <div [ngClass]="showHowToUse ? 'tab-pane fade show active' : 'tab-pane fade' " id="como-usar-text" role="tabpanel"
+      aria-labelledby="como-usar-tab">Como usar </div>
+    <div [ngClass]="!showHowToUse ? 'tab-pane fade show active' : 'tab-pane fade'" id="onde-fica-text" role="tabpanel"
+      aria-labelledby="onde-fica-tab">Onde fica </div> -->
+  </div>
 </main>
 <ng-template #loading>
   <h1>Carregando oferta...</h1>

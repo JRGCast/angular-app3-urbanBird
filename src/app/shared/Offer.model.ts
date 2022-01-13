@@ -14,3 +14,8 @@ export class Offer {
   public imagens!: Array<OfferImgObj>
   constructor() { }
 }
+
+export class HTUOrWIResponse {
+  public id!: number
+  public descricao!: string
+}

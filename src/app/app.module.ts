@@ -12,6 +12,9 @@ import { FunComponent } from './fun/fun.component'
 import { RouterModule } from '@angular/router';
 import { ROUTES } from './routes/routes.routes';
 import { OfferComponent } from './offer/offer.component';
+import { WhereIsItComponent } from './offer/where-is-it/where-is-it.component';
+import { HowToUseComponent } from './offer/how-to-use/how-to-use.component';
+import { JustTestComponent } from './just-test/just-test.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { OfferComponent } from './offer/offer.component';
     FooterComponent,
     RestaurantsComponent,
     FunComponent,
-    OfferComponent
+    OfferComponent,
+    WhereIsItComponent,
+    HowToUseComponent,
+    JustTestComponent,
   ],
   imports: [
     BrowserModule,

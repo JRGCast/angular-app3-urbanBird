@@ -2,12 +2,18 @@ h1 {
     color: #555
 }
 
+.nav-link {
+    &:hover {
+        cursor: pointer;
+    }
+}
+
 .oferta {
     margin-top: 25px
 }
 
 .oferta img {
-    width: 372px;
+    width : 372px;
     height: 240px;
 }
 
@@ -16,8 +22,8 @@ h1 {
 }
 
 .thumbnails img {
-    width: 124px;
-    height: 80px;
-    margin-right: 10px;
+    width        : 124px;
+    height       : 80px;
+    margin-right : 10px;
     margin-bottom: 10px;
 }
