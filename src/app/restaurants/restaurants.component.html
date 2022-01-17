@@ -20,7 +20,7 @@
           <p>Anunciado por: <b>{{rOffer.anunciante}}</b></p>
         </div>
         <div class="row">
-          <p>R$ {{rOffer.valor.toFixed(2).replace('.', ',')}}</p>
+          <p> {{rOffer.valor | currency}}</p>
         </div>
         <div class="row">
           <!-- routerLink também pode ser passado para botões -->

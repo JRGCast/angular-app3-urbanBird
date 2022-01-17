@@ -71,7 +71,7 @@ export class FetchServices implements OnInit {
     // aqui utilizar-se-á o observable, portanto, não sendo possível usar o método theFetching (ou, mais tarde, refatorá-lo para observable)
     const currSearchUrl = `${ this.offerUrl }?descricao_oferta_like=${ searchInput }`
     const observableService = this.httpClient.get(currSearchUrl, { responseType: 'json' })
-      .pipe(retry(4),
+      .pipe(retryWhen(genericRetryStrategy()),
       map((response: Offer[] | any) => { console.log(response); return response }))
     return observableService
   }

@@ -21,8 +21,14 @@ export class HowToUseComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.currOfferId = this.theRoute.snapshot.parent?.params['id']
-    this.theFetchService.getCurrHTUorWI(this.currOfferId, 'howtouse')
-      .then((info: HTUOrWIResponse | undefined) => this.currOfferHTUInfo = info)
+    const currIdSnapShot = this.theRoute.snapshot.parent?.params['id'] // aqui o mesmo problema do snapshot do componente pai
+    this.theRoute.parent?.params.subscribe((parameters: any) => {
+      this.currOfferId = parameters.id;
+      console.log(`currIdSnapshot how to use: ${ currIdSnapShot }, ''subscribe: ${ this.currOfferId }`)
+      this.theFetchService.getCurrHTUorWI(this.currOfferId, 'howtouse')
+        .then((theResponse: HTUOrWIResponse | undefined) => {
+          this.currOfferHTUInfo = theResponse
+        })
+    })
   }
 }

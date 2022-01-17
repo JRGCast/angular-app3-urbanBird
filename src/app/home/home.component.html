@@ -11,7 +11,7 @@
         <div class="card-block">
           <h4 class="card-title">{{item.titulo}}</h4>
           <p class="card-text">{{item.descricao_oferta}}</p>
-          <p class="preco">R${{item.valor.toFixed(2).replace('.', ',')}}</p>
+          <p class="preco"> {{item.valor |  currency }}</p>
           <!-- Quando for necessário passar parâmetros, lembre-se que o routerLink é um array -->
           <button [routerLink]="['oferta', item.id]" class="btn btn-outline-primary">Ver oferta</button>
         </div>

@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { BuyOrderComponent } from "../buy-order/buy-order.component";
 import { FunComponent } from "../fun/fun.component";
 import { HomeComponent } from "../home/home.component";
 import { JustTestComponent } from "../just-test/just-test.component";
@@ -21,4 +22,5 @@ export const ROUTES: Routes = [
       { path: 'onde-fica', component: WhereIsItComponent }
     ]
   },
+  { path: 'ordem-compra', component: BuyOrderComponent }
 ]

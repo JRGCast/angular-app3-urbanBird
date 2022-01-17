@@ -1,0 +1,91 @@
+<div class="container">
+  <div class="ordem-compra" *ngIf="orderDoneId === undefined else orderAlredyDone">
+    <form novalidate>
+      <h5>Sua Compra</h5>
+      <hr />
+      <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
+        <div class="form-group col-sm-1">
+          <img src="/assets/ofertas/1/img1.jpg" class="img-fluid">
+        </div>
+        <div class="form-group col-sm-6"> Super Burger <br /> Rodízio de Mini-hambúrger com opção de entrada. </div>
+        <div>
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-link">-</button> 1 <button type="button"
+                class="btn btn-link">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-sm-3 d-flex justify-content-end"> 29.90 </div>
+      </div>
+      <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
+        <div class="form-group col-sm-1">
+          <img src="/assets/ofertas/4/img1.jpg" class="img-fluid">
+        </div>
+        <div class="form-group col-sm-6"> Estância das águas <br /> Diversão garantida com piscinas, trilhas e muito
+          mais. </div>
+        <div>
+          <div class="row">
+            <div class="col">
+              <button type="button" class="btn btn-link">-</button> 1 <button type="button"
+                class="btn btn-link">+</button>
+            </div>
+          </div>
+        </div>
+        <div class="form-group col-sm-3 d-flex justify-content-end"> 31.90 </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col d-flex justify-content-end">
+          <h4>Total do pedido: 61.80</h4>
+        </div>
+      </div>
+      <br />
+      <h5>Dados de entrega</h5>
+      <hr />
+      <div class="form-row">
+        <div class="form-group col-md-6">
+          <input type="text" [ngClass]="addressValid ? 'form-control is-valid' : 'form-control is-invalid'"
+            placeholder="Endereço" autocomplete="off" minlength="5" #inputAddress required [value]="address"
+            (input)="updateAddress('address', inputAddress.value)">
+          <small class="invalid-feedback" *ngIf="!addressValid else campOk">Endereço inválido</small>
+        </div>
+        <div class="form-group col-md-2">
+          <input type="number" [ngClass]="addressNumberValid ? 'form-control is-valid' : 'form-control is-invalid'"
+            placeholder="Número apto/casa" autocomplete="off" min="0" #inputAddressNumber required
+            [value]="addressNumber" (input)="updateAddress('addressNumber', inputAddressNumber.value)" />
+          <small class="invalid-feedback" *ngIf="!addressNumberValid else campOk">Número inválido</small>
+          <br />
+        </div>
+        <div class="form-group col-md-4">
+          <input type="text" [ngClass]="addressComplementValid ? 'form-control is-valid' : 'form-control is-invalid'"
+            placeholder="Complemento" autocomplete="off" [value]="addressComplement" #inputAddressComplement
+            (input)="updateAddress('addressComplement', inputAddressComplement.value)">
+          <small class="invalid-feedback" *ngIf="!addressComplementValid else campOk">Coloque um complemento</small>
+          <ng-template #campOk>
+            <small class="valid-feedback">Campo OK!</small>
+          </ng-template>
+        </div>
+      </div>
+      <br />
+      <h5>Dados de pagamento</h5>
+      <hr />
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <select [ngClass]="payMethodValid ? 'form-control is-valid' : 'form-control is-invalid'" #paymentMethodSelect
+            (change)="updatePaymentMethod(paymentMethodSelect.value)">
+            <option value="">Selecione uma opção</option>
+            <option value="money" selected="{{payMethod === 'money' ? 'selected' : ''}}">Dinheiro</option>
+            <option value="debitCard" selected="{{payMethod === 'debitCard' ? 'selected' : ''}}">Débito</option>
+          </select>
+          <small class="invalid-feedback" *ngIf="!payMethodValid else campOk">Selecione uma forma de pagamento</small>
+        </div>
+      </div>
+      <hr />
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="confirmButtonDisabled"
+        (click)="$event.preventDefault(); orderConfirmation(); ">Confirmar compra</button>
+    </form>
+  </div>
+  <ng-template #orderAlredyDone>
+    <urbanBird-order-buy-success [orderIdExists]="orderDoneId"></urbanBird-order-buy-success>
+  </ng-template>
+</div>

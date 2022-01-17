@@ -20,8 +20,14 @@ export class WhereIsItComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.currOfferId = this.theRoute.snapshot.parent?.params['id']
-    this.theFetchService.getCurrHTUorWI(this.currOfferId, 'whereis')
-      .then((info: HTUOrWIResponse | undefined) => this.currOfferWIInfo = info)
+    const currIdSnapShot = this.theRoute.snapshot.parent?.params['id'] // aqui o mesmo problema do snapshot do componente pai
+    this.theRoute.parent?.params.subscribe((parameters: any) => {
+      this.currOfferId = parameters.id;
+      console.log(`currIdSnapshot where is it: ${ currIdSnapShot }, ''subscribe: ${ this.currOfferId }`)
+      this.theFetchService.getCurrHTUorWI(this.currOfferId, 'whereisit')
+        .then((theResponse: HTUOrWIResponse | undefined) => {
+          this.currOfferWIInfo = theResponse
+        })
+    })
   }
 }

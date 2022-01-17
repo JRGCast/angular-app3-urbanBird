@@ -14,12 +14,17 @@ export class TopComponent implements OnInit {
   public foundSearchOffers!: Observable<Offer[]> | any
   private subjectSearch: Subject<string> = new Subject<string>()
   public theSearchedOffers!: Offer[]
+  public hiddenUl: boolean = true
+  public currDate!: number
   constructor(
     public http: HttpClient,
     private theFetch: FetchServices
   ) { }
 
   ngOnInit(): void {
+    setInterval(() => {
+      this.currDate = Date.now()
+    }, 1000)
     this.foundSearchOffers = this.subjectSearch.pipe(
       debounceTime(1000), // aqui é o tempo que será aguardado antes de encaminhar a requisição para o switchMap
       distinctUntilChanged(), // isto evita que seja feita uma nova pesquisa se a anterior tiver o termo idêntico
@@ -29,7 +34,9 @@ export class TopComponent implements OnInit {
       }),
       catchError((err: any, observ: any) => { console.log(err.message); return observ })
     )
-    this.foundSearchOffers.subscribe((theSearchedOffer: Offer[]) => this.theSearchedOffers = theSearchedOffer)
+    this.foundSearchOffers.subscribe((theSearchedOffer: Offer[]) => {
+      this.theSearchedOffers = theSearchedOffer
+    })
     console.log(this.foundSearchOffers)
   }
 
@@ -42,6 +49,7 @@ export class TopComponent implements OnInit {
 
   public search(searchInputValue: string): void {
     console.log('encaminhado', searchInputValue, 'para o subjectSearch reencaminhar')
+    this.hiddenUl = false
     this.subjectSearch.next(searchInputValue) // veja que aqui reencaminha toda vez, mas, com o debounceTime filtrando, apenas após 1 segundo da última tecla liberada (keyup) é que a última string será rencaminhada para o serviço de fetch no switchMap
 
     // this.foundSearchOffers = this.theFetch.getOfferFromSearchBar(searchInputValue).subscribe(
@@ -51,5 +59,11 @@ export class TopComponent implements OnInit {
     //     complete: () => console.log('Observable complete!')
     //   }
     // )
+  }
+
+  public clearSearch(searchInput: HTMLInputElement): void {
+    this.hiddenUl = true
+    this.subjectSearch.next('')
+    searchInput.value = ''
   }
 }

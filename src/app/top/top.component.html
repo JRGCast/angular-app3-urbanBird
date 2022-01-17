@@ -9,15 +9,22 @@
       <!-- #searchInput é a variável de referência que aponta para o input, facilitando a recuperação do value no mesmo elemento HTML;
       afinal, não é mais necessário passar o evento e dissecá-lo na lógica da função -->
       <div>
-        <input type="text" class="form-control" placeholder="Pesquise ofertas" #searchInput
+        <input type="text" id="search-input" class="form-control" placeholder="Pesquise ofertas" #searchInput
           (keyup)="search(searchInput.value)" />
         <ul class="list-group" style="position: absolute;">
-          <li class="list-group-item active" aria-current="true" *ngFor="let theOffer of theSearchedOffers">
-            {{theOffer.titulo}}</li>
+          <!-- Seria possível retirar o subscribe do atributo 'theSearchedOffers' e simplesmente passar 
+          *ngFor="let theOffer of theSearchedOffers | async", pois o pipe '| async' recuperaria os valores do observable assim que estivessem disponíveis -->
+          <li class="list-group-item" aria-current="true" *ngFor="let theOffer of theSearchedOffers"
+            [hidden]="hiddenUl">
+            <a [routerLink]="['oferta', theOffer.id]" (click)="clearSearch(searchInput)">
+              {{theOffer.titulo | reducedDescription:9}}
+            </a>
+          </li>
         </ul>
       </div>
     </div>
   </nav>
+  <article>{{currDate | date:'dd/MM/yyyy hh:mm:ss'}}</article>
   <div class="menu">
     <div class="container">
       <ul class="nav">
