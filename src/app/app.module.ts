@@ -20,6 +20,7 @@ import { registerLocaleData } from '@angular/common';
 import { ReducedDescription } from 'src/utils/reducedDescription.pipe';
 import { BuyOrderComponent } from './buy-order/buy-order.component';
 import { OrderBuySuccessComponent } from './order-buy-success/order-buy-success.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 registerLocaleData(localePt) // documentação fala de acrescentar em app.module, mas ao tentar, a propriedade acrescentada fica como 'não permitida'. Isso aqui resolve (serve para que todos os números onde for chamado o pipe currency venham com o padrão Real Brasileiro, isto é, ponto no milhar e vírgula nos centavos (R$1.030,50))
 @NgModule({
@@ -34,15 +35,17 @@ registerLocaleData(localePt) // documentação fala de acrescentar em app.module
     WhereIsItComponent,
     HowToUseComponent,
     JustTestComponent,
-    ReducedDescription,
+    ReducedDescription, // vem aqui em declarations
     BuyOrderComponent,
-    OrderBuySuccessComponent, // vem aqui em declarations
+    OrderBuySuccessComponent, 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule.forRoot(ROUTES)
+    RouterModule.forRoot(ROUTES), // para rotas geral, forRoot, em rotas 'filhas', seria forChildren, dentro do componente pai, tal como em OfferComponent
+    // FormsModule, // para template forms
+    ReactiveFormsModule, // para o reactiveForms, que é a maneira mais atual de se lidar com validação de formulários
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },

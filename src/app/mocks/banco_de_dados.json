@@ -187,10 +187,10 @@
   ],
   "pedidos": [
     {
-      "address": "12312421",
+      "address": "123214",
       "addressNumber": 1,
-      "addressComplement": "124",
-      "paymentMethod": "debitCard",
+      "addressComplement": "2",
+      "paymentMethod": "money",
       "id": 1
     }
   ]

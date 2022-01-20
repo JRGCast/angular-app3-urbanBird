@@ -1,6 +1,12 @@
+<!-- Comentários com o data binding e template forms serão identificados -->
 <div class="container">
   <div class="ordem-compra" *ngIf="orderDoneId === undefined else orderAlredyDone">
-    <form novalidate>
+    <!-- <form novalidate> este formulário se referia ao data binding -->
+    <!-- <form #buyForm="ngForm" novalidate (ngSubmit)="orderConfirmation(); templateFormConfirmation(buyForm)"> este formulário se referia ao templateForms 
+      Atribuir o ngForm gera uma representação deste formulário pelo próprio Angular;
+        veja os dados disso com {{ nomeDaVariável.valor | json }}, apenas cuidado com o valor circular -->
+    <!-- Agora vamos ao Reactive Forms: o primeiro passo é atribuir a propriedade formGroup do template com o formGroup da classe, sendo desnecessário qualquer variável de template: -->
+    <form [formGroup]="theReactiveFormGroup" (ngSubmit)="orderConfirmationReactiveForms()" novalidate>
       <h5>Sua Compra</h5>
       <hr />
       <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
@@ -40,30 +46,71 @@
         </div>
       </div>
       <br />
+      <!-- Apenas para visualização do templateForms em ação
+        <pre> Válido? {{ buyForm.valid | json }}</pre>
+      <pre> Inválido? {{ buyForm.invalid | json }}</pre> -->
       <h5>Dados de entrega</h5>
       <hr />
       <div class="form-row">
         <div class="form-group col-md-6">
-          <input type="text" [ngClass]="addressValid ? 'form-control is-valid' : 'form-control is-invalid'"
-            placeholder="Endereço" autocomplete="off" minlength="5" #inputAddress required [value]="address"
-            (input)="updateAddress('address', inputAddress.value)">
-          <small class="invalid-feedback" *ngIf="!addressValid else campOk">Endereço inválido</small>
+          <!-- Vamos trocar todos os [ngClass] agora, pois, estamos utilizando o templateForms, então só aplicaremos estilos de acordo com as classes dos mesmos, para isso, vamos até os arquivos css/scss.
+          Todos os inputs e selects tinham algo como [ngClass]="addressValid ? 'form-control is-valid' : 'form-control is-invalid'" + todas as linhas, agora não possuem mais: 
+          <input type="text" placeholder="Endereço" autocomplete="off" minlength="5" #inputAddress [value]="address"
+            (input)="updateAddress('address', inputAddress.value)" name="address" ngModel #formInputAddress="ngModel"
+            required>
+          Ao colocar o atributo "name" e referenciar com o atributo ngModel, a chave "address" foi adicionada ao value do nosso form, veja que agora buyForm.value possui a propriedade address, e o conteúdo dela será o digitado no input 
+           <small class="invalid-feedback" *ngIf="!addressValid else campOk">Endereço inválido</small> 
+          <small *ngIf="!formInputAddress.valid && formInputAddress.touched">Endereço inválido</small>
+          <small *ngIf="formInputAddress.valid && formInputAddress.touched">OK!</small>
+          Tudo isso se referia ao templateFOrms
+        -->
+          <!-- Para fazer a referência dos campos controlados à classe, basta utilizar a propriedade formControlName, atribuindo o valor do respectivo campo da classe: -->
+          <input type="text" placeholder="Endereço" autocomplete="off" formControlName="address">
+          <!-- Veja a sintaxe para recuperar os atributos (valid, touched, pristine, etc): -->
+          <small *ngIf="!theReactiveFormGroup.get('address')?.valid && theReactiveFormGroup.get('address')?.touched ">
+            Endereço inválido</small>
+          <small *ngIf="theReactiveFormGroup.get('address')?.valid && theReactiveFormGroup.get('address')?.touched">
+            OK!</small>
         </div>
         <div class="form-group col-md-2">
-          <input type="number" [ngClass]="addressNumberValid ? 'form-control is-valid' : 'form-control is-invalid'"
-            placeholder="Número apto/casa" autocomplete="off" min="0" #inputAddressNumber required
-            [value]="addressNumber" (input)="updateAddress('addressNumber', inputAddressNumber.value)" />
-          <small class="invalid-feedback" *ngIf="!addressNumberValid else campOk">Número inválido</small>
+          <!-- Como os valores dos campos de ngForms (pristine, valid, etc.) estão dentro do ngModel,
+          podemos referenciar uma variável template ao ngForm, no exemplo abaixo, faremos #formInputAddressNumber="ngModel"
+          <input type="number" placeholder="Número apto/casa" autocomplete="off" min="0" #inputAddressNumber
+            [value]="addressNumber" (input)="updateAddress('addressNumber', inputAddressNumber.value)"
+            name="addressNumber" ngModel #formInputAddressNumber="ngModel" required />
+           Com isso podemos referenciar diretamente o ngModel para mostrar ou não a mensagem.
+            Ao invés de: 
+            <small class="invalid-feedback" *ngIf="!addressNumberValid else campOk">Número inválido</small>, faremos:
+           <small *ngIf="!formInputAddressNumber.valid && formInputAddressNumber.touched">Número inválido</small>
+          <small *ngIf="formInputAddressNumber.valid && formInputAddressNumber.touched">OK!</small>
+           Veja os valores da variável que aponta ao ngModel com: 
+           <p>{{formInputAddressNumber.valid}}</p> -->
+          <!-- Tudo isso acima se referia à template forms -->
+          <input type="number" placeholder="Número apto/casa" autocomplete="off" formControlName="addressNumber" />
+          <small
+            *ngIf="!theReactiveFormGroup.get('addressNumber')?.valid && theReactiveFormGroup.get('addressNumber')?.touched ">
+            Número inválido</small>
+          <small
+            *ngIf="theReactiveFormGroup.get('addressNumber')?.valid && theReactiveFormGroup.get('addressNumber')?.touched">
+            OK!</small>
           <br />
         </div>
         <div class="form-group col-md-4">
-          <input type="text" [ngClass]="addressComplementValid ? 'form-control is-valid' : 'form-control is-invalid'"
-            placeholder="Complemento" autocomplete="off" [value]="addressComplement" #inputAddressComplement
-            (input)="updateAddress('addressComplement', inputAddressComplement.value)">
+          <!-- <input type="text" placeholder="Complemento" autocomplete="off" [value]="addressComplement"
+            #inputAddressComplement (input)="updateAddress('addressComplement', inputAddressComplement.value)"
+            name="addressComplement" ngModel>
           <small class="invalid-feedback" *ngIf="!addressComplementValid else campOk">Coloque um complemento</small>
           <ng-template #campOk>
             <small class="valid-feedback">Campo OK!</small>
-          </ng-template>
+          </ng-template> -->
+          <!-- Há dataBinding e TemplateForms acima -->
+          <input type="text" placeholder="Complemento" autocomplete="off" formControlName="addressComplement">
+          <small
+            *ngIf="!theReactiveFormGroup.get('addressComplement')?.valid && theReactiveFormGroup.get('addressComplement')?.touched ">
+            Complemento inválido</small>
+          <small
+            *ngIf="theReactiveFormGroup.get('addressComplement')?.valid && theReactiveFormGroup.get('addressComplement')?.touched">
+            OK!</small>
         </div>
       </div>
       <br />
@@ -71,18 +118,39 @@
       <hr />
       <div class="form-row">
         <div class="form-group col-md-3">
-          <select [ngClass]="payMethodValid ? 'form-control is-valid' : 'form-control is-invalid'" #paymentMethodSelect
-            (change)="updatePaymentMethod(paymentMethodSelect.value)">
+          <!-- <select #paymentMethodSelect (change)="updatePaymentMethod(paymentMethodSelect.value)" name="payMethod"
+            ngModel #formPaymentMethodSelect="ngModel" required>
             <option value="">Selecione uma opção</option>
             <option value="money" selected="{{payMethod === 'money' ? 'selected' : ''}}">Dinheiro</option>
             <option value="debitCard" selected="{{payMethod === 'debitCard' ? 'selected' : ''}}">Débito</option>
           </select>
-          <small class="invalid-feedback" *ngIf="!payMethodValid else campOk">Selecione uma forma de pagamento</small>
+         <small class="invalid-feedback" *ngIf="!payMethodValid else campOk">Selecione uma forma de pagamento</small> 
+          <small *ngIf="!formPaymentMethodSelect.valid && formPaymentMethodSelect.touched">Forma pgto. inválida</small>
+          <small *ngIf="formPaymentMethodSelect.valid && formInputAddressNumber.touched">OK!</small> -->
+          <!-- Há dataBinding e templateForms acima -->
+          <select formControlName="payMethod">
+            <option value="">Selecione uma opção</option>
+            <option value="money">Dinheiro</option>
+            <option value="debitCard">Débito</option>
+          </select>
+          <small
+            *ngIf="!theReactiveFormGroup.get('payMethod')?.valid && theReactiveFormGroup.get('payMethod')?.touched ">
+            Método inválido</small>
+          <small *ngIf="theReactiveFormGroup.get('payMethod')?.valid && theReactiveFormGroup.get('payMethod')?.touched">
+            OK!</small>
         </div>
       </div>
       <hr />
-      <button type="submit" class="btn btn-primary btn-lg" [disabled]="confirmButtonDisabled"
-        (click)="$event.preventDefault(); orderConfirmation(); ">Confirmar compra</button>
+      <!--  O botão abaixo tinha >(click)="$event.preventDefault(); orderConfirmation(); "< 
+        para confirmar o formulário, nós substituímos pela diretiva ngSubmit lá na tag <form>,
+          ficou bem mais limpo, não? -->
+      <!-- <button type="submit" class="btn btn-primary btn-lg" [disabled]="confirmButtonDisabled">Confirmar compra</button> 
+      aqui acima foi feito com o templateForms-->
+      <!-- Com reactiveForms, para desabilitar o botão até que esteja tudo válido:
+       <button type="submit" class="btn btn-primary btn-lg" [disabled]="!theReactiveFormGroup.valid">Confirmar
+      compra</button> 
+    OU manter o botão sempre ativo, porém, com ressalvas caso clicado:-->
+      <button type="submit" class="btn btn-primary btn-lg">Confirmar compra</button>
     </form>
   </div>
   <ng-template #orderAlredyDone>
