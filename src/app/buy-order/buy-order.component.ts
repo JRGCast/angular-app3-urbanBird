@@ -6,12 +6,15 @@ import { FormControl, FormGroup, Validators } from '@angular/forms'; // sobre o 
 import { BuyOrderService } from 'src/services/buyOrderService.service';
 import { FetchServices } from 'src/services/fetchInAPI.service';
 import { Order } from '../shared/Order.model';
+import { CartService } from 'src/services/cartService.service';
+import { CartItem } from '../shared/CartItem.model';
+import { ThrowStmt } from '@angular/compiler';
 
 @Component({
   selector: 'urbanBird-buy-order',
   templateUrl: './buy-order.component.html',
   styleUrls: ['./buy-order.component.scss'],
-  providers: [FetchServices, BuyOrderService]
+  providers: [FetchServices, BuyOrderService, /*CartService*/] // não mais provido aqui, já que está provido na instância do app.module
 })
 export class BuyOrderComponent implements OnInit {
   // public address: string = ''
@@ -43,6 +46,8 @@ export class BuyOrderComponent implements OnInit {
     "payMethod": new FormControl(null, Validators.required),
   })
 
+  public currCart: Array<CartItem> = []
+
   // form validation com data biding
   // public addressValid: boolean = false
   // public addressNumberValid: boolean = false
@@ -50,9 +55,13 @@ export class BuyOrderComponent implements OnInit {
   // public payMethodValid: boolean = false
   // public confirmButtonDisabled: boolean = true
 
-  constructor(public buyOrderService: BuyOrderService) { }
+  constructor(
+    public buyOrderService: BuyOrderService,
+    public cartService: CartService) { }
 
   ngOnInit(): void {
+    this.currCart = this.cartService.showCartItems()
+    setTimeout(() => { console.log(this.currCart) }, 100)
   }
 
   // updateAddress(updateWhat: string, inputtedAddress: string): void {
@@ -130,19 +139,35 @@ export class BuyOrderComponent implements OnInit {
     if (this.theReactiveFormGroup.status === 'INVALID') {
       this.theReactiveFormGroup.markAllAsTouched() // apenas para dar o feedback visual caso a pessoa clique no botão de confirmação porventura destravado
     } else {
-      let { value: { address, addressNumber, addressComplement, payMethod } } = this.theReactiveFormGroup
-      let theReactiveFormOrder: Order = new Order(
-        address,
-        addressNumber,
-        addressComplement,
-        payMethod
-      )
-      this.buyOrderService.confirmBuyOrder(theReactiveFormOrder).subscribe(
-        {
-          next: (orderId: number) => { console.log(orderId); this.orderDoneId = orderId },
-          error: err => console.log(err)
-        }
-      )
+      if (this.currCart.length > 0) {
+        let { value: { address, addressNumber, addressComplement, payMethod } } = this.theReactiveFormGroup
+        const theReactiveFormOrder: Order = new Order(
+          address,
+          addressNumber,
+          addressComplement,
+          payMethod,
+          this.cartService.showCartItems()
+        )
+        this.buyOrderService.confirmBuyOrder(theReactiveFormOrder).subscribe(
+          {
+            next: (orderId: number) => { console.log(orderId); this.orderDoneId = orderId; this.cartService.cleanCart() },
+            error: err => console.log('Erro:', err)
+          }
+        )
+      } else {
+        alert('Seu carrinho está vazio!')
+      }
     }
+  }
+  orderTotalPrice(): number {
+    return this.cartService.sumTotalPrice()
+  }
+
+  increaseItemQty(item: CartItem) {
+    this.cartService.increaseCartItemQty(item)
+  }
+
+  decreaseItemQty(item: CartItem) {
+    this.cartService.decreaseCartItemQty(item)
   }
 }

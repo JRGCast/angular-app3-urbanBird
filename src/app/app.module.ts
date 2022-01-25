@@ -21,6 +21,7 @@ import { ReducedDescription } from 'src/utils/reducedDescription.pipe';
 import { BuyOrderComponent } from './buy-order/buy-order.component';
 import { OrderBuySuccessComponent } from './order-buy-success/order-buy-success.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CartService } from '../services/cartService.service'
 
 registerLocaleData(localePt) // documentação fala de acrescentar em app.module, mas ao tentar, a propriedade acrescentada fica como 'não permitida'. Isso aqui resolve (serve para que todos os números onde for chamado o pipe currency venham com o padrão Real Brasileiro, isto é, ponto no milhar e vírgula nos centavos (R$1.030,50))
 @NgModule({
@@ -37,7 +38,7 @@ registerLocaleData(localePt) // documentação fala de acrescentar em app.module
     JustTestComponent,
     ReducedDescription, // vem aqui em declarations
     BuyOrderComponent,
-    OrderBuySuccessComponent, 
+    OrderBuySuccessComponent,
   ],
   imports: [
     BrowserModule,
@@ -49,7 +50,8 @@ registerLocaleData(localePt) // documentação fala de acrescentar em app.module
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'pt-BR' },
-    { provide: DEFAULT_CURRENCY_CODE, useValue: "BRL" }
+    { provide: DEFAULT_CURRENCY_CODE, useValue: "BRL" },
+    CartService, // é necessário colocá-lo aqui para que todos os módulos tenham acesso a ele, e as informações não sejam perdidas após a destruição de um componente (sair da página)
   ],
   bootstrap: [AppComponent]
 })

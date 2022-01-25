@@ -192,6 +192,40 @@
       "addressComplement": "2",
       "paymentMethod": "money",
       "id": 1
+    },
+    {
+      "address": "123213",
+      "addressNumber": 1,
+      "addressComplement": "123",
+      "paymentMethod": "money",
+      "cartItemsOrder": [
+        {
+          "id": 2,
+          "title": "Cozinha Mexicana",
+          "image": "/assets/ofertas/2/img1.jpg",
+          "offerDescription": "Almoço ou Jantar com Rodízio Mexicano delicioso.",
+          "price": 32.9,
+          "quantity": 2
+        }
+      ],
+      "id": 2
+    },
+    {
+      "address": "32141421",
+      "addressNumber": 1421412,
+      "addressComplement": "124124",
+      "paymentMethod": "debitCard",
+      "cartItemsOrder": [
+        {
+          "id": 4,
+          "title": "Estância das águas",
+          "image": "/assets/ofertas/4/img1.jpg",
+          "offerDescription": "Diversão garantida com piscinas, trilhas e muito mais.",
+          "price": 31.9,
+          "quantity": 6
+        }
+      ],
+      "id": 3
     }
   ]
 }

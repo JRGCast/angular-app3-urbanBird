@@ -9,42 +9,42 @@
     <form [formGroup]="theReactiveFormGroup" (ngSubmit)="orderConfirmationReactiveForms()" novalidate>
       <h5>Sua Compra</h5>
       <hr />
-      <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
-        <div class="form-group col-sm-1">
-          <img src="/assets/ofertas/1/img1.jpg" class="img-fluid">
-        </div>
-        <div class="form-group col-sm-6"> Super Burger <br /> Rodízio de Mini-hambúrger com opção de entrada. </div>
-        <div>
-          <div class="row">
-            <div class="col">
-              <button type="button" class="btn btn-link">-</button> 1 <button type="button"
-                class="btn btn-link">+</button>
+      <section *ngIf="currCart.length > 0 else emptyCartMessage">
+        <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0"
+          *ngFor="let cartItem of currCart; let isOdd = odd">
+          <!-- <div [ngClass]="isOdd ? 'odd' : ''"> -->
+          <div class="form-group col-sm-1">
+            <img [src]="cartItem.image" class="img-fluid">
+          </div>
+          <div class="form-group col-sm-6"> {{cartItem.title}} <br /> {{cartItem.offerDescription}} </div>
+          <div>
+            <div class="row">
+              <div class="col">
+                <button type="button" class="btn btn-danger" (click)="decreaseItemQty(cartItem)">-</button>
+                {{cartItem.quantity}} <button type="button" class="btn btn-success"
+                  (click)="increaseItemQty(cartItem)">+</button>
+              </div>
             </div>
           </div>
-        </div>
-        <div class="form-group col-sm-3 d-flex justify-content-end"> 29.90 </div>
-      </div>
-      <div class="form-row" style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
-        <div class="form-group col-sm-1">
-          <img src="/assets/ofertas/4/img1.jpg" class="img-fluid">
-        </div>
-        <div class="form-group col-sm-6"> Estância das águas <br /> Diversão garantida com piscinas, trilhas e muito
-          mais. </div>
-        <div>
-          <div class="row">
-            <div class="col">
-              <button type="button" class="btn btn-link">-</button> 1 <button type="button"
-                class="btn btn-link">+</button>
-            </div>
+          <div class="form-group col-sm-3 d-flex justify-content-end"> {{cartItem.quantity * cartItem.price | currency}}
           </div>
         </div>
-        <div class="form-group col-sm-3 d-flex justify-content-end"> 31.90 </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col d-flex justify-content-end">
-          <h4>Total do pedido: 61.80</h4>
+        <!-- </div> -->
+        <div class="form-row">
+          <div class="form-group col d-flex justify-content-end">
+            <!-- É possível chamar um método diretamente no template quando for de um serviço injetado:
+            <h4>Total do pedido: {{cartService.sumTotalPrice() | currency}}</h4>
+           mas, para não ficar macarrônico, vamos colocar um método na classe para chamá-lo-->
+            <h4>Total do pedido: {{orderTotalPrice()| currency}}</h4>
+          </div>
         </div>
-      </div>
+      </section>
+      <ng-template #emptyCartMessage>
+        <div class="form-row d-flex justify-content-center"
+          style="background: #FAFAFA; padding: 20px; border-bottom: solid 1px #F0F0F0">
+          <h1>Seu carrinho está vazio =(</h1>
+        </div>
+      </ng-template>
       <br />
       <!-- Apenas para visualização do templateForms em ação
         <pre> Válido? {{ buyForm.valid | json }}</pre>
