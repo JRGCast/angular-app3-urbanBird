@@ -3,13 +3,14 @@ import { HttpClient, HttpResponse } from "@angular/common/http"
 import { Injectable, OnInit } from "@angular/core"
 import { lastValueFrom, Observable, map, retry, retryWhen } from 'rxjs';
 import { genericRetryStrategy } from "src/app/shared/retryWhenStrategy.model";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class FetchServices implements OnInit {
   public allOffers!: Array<Offer>
-  private offerUrl: string = 'http://localhost:3000/ofertas'
-  private howToUseUrl: string = 'http://localhost:3000/como-usar'
-  private whereIsUrl: string = 'http://localhost:3000/onde-fica'
+  private offerUrl: string = `${environment.apiURL}/ofertas`
+  private howToUseUrl: string = `${environment.apiURL}/como-usar`
+  private whereIsUrl: string = `${environment.apiURL}/onde-fica`
 
   constructor(private httpClient: HttpClient) {
   }
@@ -72,7 +73,7 @@ export class FetchServices implements OnInit {
     const currSearchUrl = `${ this.offerUrl }?descricao_oferta_like=${ searchInput }`
     const observableService = this.httpClient.get(currSearchUrl, { responseType: 'json' })
       .pipe(retryWhen(genericRetryStrategy()),
-      map((response: Offer[] | any) => { console.log(response); return response }))
+        map((response: Offer[] | any) => { console.log(response); return response }))
     return observableService
   }
 }
